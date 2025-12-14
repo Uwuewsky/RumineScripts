@@ -6,8 +6,8 @@
 // @match        https://ru-minecraft.ru/*
 // @icon         https://www.google.com/s2/favicons?domain=ru-minecraft.ru
 // @grant        none
-// @updateURL    https://raw.githubusercontent.com/Uwuewsky/RumineScripts/refs/heads/master/rumine-direct-link.user.js
-// @downloadURL  https://raw.githubusercontent.com/Uwuewsky/RumineScripts/refs/heads/master/rumine-direct-link.user.js
+// @updateURL    https://raw.githubusercontent.com/Uwuewsky/RumineScripts/refs/heads/master/direct-link.user.js
+// @downloadURL  https://raw.githubusercontent.com/Uwuewsky/RumineScripts/refs/heads/master/direct-link.user.js
 // ==/UserScript==
 
 
