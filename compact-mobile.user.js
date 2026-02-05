@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Rumine Mobile Compact Style
-// @version      1.2
+// @version      1.4
 // @description  Скрипт для стилизации форума ru-minecraft.ru под IRC
 // @author       Sab [https://ru-minecraft.ru/user/Sab/]
 // @match        https://ru-minecraft.ru/forum/showtopic-*
@@ -125,6 +125,11 @@ function injectStyles() {
     .ircPost .msgInfo > div:not(.msgIControl) {
         display: inline-block;
     }
+
+    .ircTitle {
+        color: gray;
+        font-size: 8px;
+    }
     </style>`);
 }
 
@@ -143,16 +148,19 @@ function restyleUserInfoBlocks() {
         let messages1 = blockinfo1.childNodes[4].textContent.trim();
         let messages2 = blockinfo1.childNodes[6].textContent.trim();
         let message_status = document.createElement("span");
-        message_status.textContent = messages1 + " / " + (messages2.slice(10) || 0)
+        message_status.textContent = messages1 + " / " + (messages2.slice(10) || 0) + " | "
 
         let blockinfo2 = e.querySelector(".blockinfo2");
         let name = e.querySelector(".namestyle");
-        let group
-        group = blockinfo2.querySelector("b");
+        let group = blockinfo2.childNodes[1];
         if (group == null) {
             group = document.createElement("b");
             group.textContent = "YMER";
         }
+
+        let title = document.createElement("span");
+        title.className = "ircTitle"
+        title.textContent = blockinfo2.childNodes[3].textContent.trim().slice(8);
 
         let online = e.querySelector(".onlinest");
         let offline = e.querySelector(".offlinest");
@@ -184,6 +192,7 @@ function restyleUserInfoBlocks() {
         block.append(group)
         block.append(document.createElement("br"))
         block.append(message_status)
+        block.append(title)
         block.append(document.createElement("br"))
         block.append(online_status)
         block.append(reputation)

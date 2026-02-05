@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Rumine Mobile Fix
-// @version      1.3
+// @version      1.4
 // @description  Скрипт для фикса мобильного форума ru-minecraft.ru
 // @author       Sab [https://ru-minecraft.ru/user/Sab/]
 // @match        https://ru-minecraft.ru/forum/showtopic-*
@@ -27,6 +27,10 @@
     .avatar img {
         max-height: 90px;
         max-width: 90px;
+    }
+
+    .msgText {
+        word-wrap: anywhere;
     }
 
     .msgText img[title], .postUserBox img[title] {
