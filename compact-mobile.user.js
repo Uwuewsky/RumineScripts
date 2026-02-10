@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Rumine Mobile Compact Style
-// @version      1.4
+// @version      1.5
 // @description  Скрипт для стилизации форума ru-minecraft.ru под IRC
 // @author       Sab [https://ru-minecraft.ru/user/Sab/]
 // @match        https://ru-minecraft.ru/forum/showtopic-*
@@ -24,6 +24,10 @@ function injectStyles() {
      */
     document.head.insertAdjacentHTML("beforeend",
     `<style id="ircScriptStyles">
+    .user-reputation-overall {
+        margin-left: 10px;
+    }
+
     .ircPost .msgText {
         margin-bottom: 0;
     }
@@ -129,6 +133,7 @@ function injectStyles() {
     .ircTitle {
         color: gray;
         font-size: 8px;
+        vertical-align: bottom;
     }
     </style>`);
 }
@@ -148,7 +153,7 @@ function restyleUserInfoBlocks() {
         let messages1 = blockinfo1.childNodes[4].textContent.trim();
         let messages2 = blockinfo1.childNodes[6].textContent.trim();
         let message_status = document.createElement("span");
-        message_status.textContent = messages1 + " / " + (messages2.slice(10) || 0) + " | "
+        message_status.textContent = messages1 + " / " + (messages2.slice(10) || 0) + " / "
 
         let blockinfo2 = e.querySelector(".blockinfo2");
         let name = e.querySelector(".namestyle");
@@ -173,7 +178,7 @@ function restyleUserInfoBlocks() {
             e.removeChild(offline)
         }
 
-        let reputation = e.querySelector(".repamsg");
+        let reputation = e.querySelector(".repamsg > .user-reputation-overall");
 
         let control_buttons = post.querySelector(".controlMsgBox.msgIControl");
         control_buttons.querySelectorAll("a").forEach((a)=>{

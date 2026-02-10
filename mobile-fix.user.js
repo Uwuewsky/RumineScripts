@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Rumine Mobile Fix
-// @version      1.4
+// @version      1.5
 // @description  Скрипт для фикса мобильного форума ru-minecraft.ru
 // @author       Sab [https://ru-minecraft.ru/user/Sab/]
 // @match        https://ru-minecraft.ru/forum/showtopic-*
@@ -127,6 +127,10 @@
 
     ul.main_menu {
         height: auto;
+    }
+
+    #containerPoll .topicPollBox {
+        width: unset;
     }
     </style>`);
 })();
