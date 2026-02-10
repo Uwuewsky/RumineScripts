@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Rumine Mobile Compact Style
-// @version      1.5
+// @version      1.6
 // @description  Скрипт для стилизации форума ru-minecraft.ru под IRC
 // @author       Sab [https://ru-minecraft.ru/user/Sab/]
 // @match        https://ru-minecraft.ru/forum/showtopic-*
@@ -130,6 +130,11 @@ function injectStyles() {
         display: inline-block;
     }
 
+    .ircIcon {
+        text-shadow: #444 0 0 2px;
+        margin-right: 5px;
+    }
+
     .ircTitle {
         color: gray;
         font-size: 8px;
@@ -153,7 +158,11 @@ function restyleUserInfoBlocks() {
         let messages1 = blockinfo1.childNodes[4].textContent.trim();
         let messages2 = blockinfo1.childNodes[6].textContent.trim();
         let message_status = document.createElement("span");
-        message_status.textContent = messages1 + " / " + (messages2.slice(10) || 0) + " / "
+        message_status.textContent = `${messages1.slice(11)} / ${(messages2.slice(10) || 0)} / `
+
+        let message_icon = document.createElement("span");
+        message_icon.textContent = "✉️"
+        message_icon.className = "ircIcon"
 
         let blockinfo2 = e.querySelector(".blockinfo2");
         let name = e.querySelector(".namestyle");
@@ -196,6 +205,7 @@ function restyleUserInfoBlocks() {
         block.append(name)
         block.append(group)
         block.append(document.createElement("br"))
+        block.append(message_icon)
         block.append(message_status)
         block.append(title)
         block.append(document.createElement("br"))
