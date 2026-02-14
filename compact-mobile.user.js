@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Rumine Mobile Compact Style
-// @version      1.6
+// @version      1.7
 // @description  Скрипт для стилизации форума ru-minecraft.ru под IRC
 // @author       Sab [https://ru-minecraft.ru/user/Sab/]
 // @match        https://ru-minecraft.ru/forum/showtopic-*
@@ -146,78 +146,85 @@ function injectStyles() {
 function restyleUserInfoBlocks() {
     let posts = document.querySelectorAll(".msg");
     posts.forEach((post)=>{
-        post.classList.add("ircPost");
+        try { restyleUserInfo(post) }
+        catch (error) {}
+    });
+}
 
-        let e = post.querySelector(".msginfoa");
-        if (e == null) { return; }
+function restyleUserInfo(post) {
 
-        let block = document.createElement("div");
-        block.className = "ircAuthorBlock"
+    let e = post.querySelector(".msginfoa");
+    if (e == null) { return; }
 
-        let blockinfo1 = e.querySelector(".blockinfo1");
-        let messages1 = blockinfo1.childNodes[4].textContent.trim();
-        let messages2 = blockinfo1.childNodes[6].textContent.trim();
-        let message_status = document.createElement("span");
-        message_status.textContent = `${messages1.slice(11)} / ${(messages2.slice(10) || 0)} / `
+    let block = document.createElement("div");
+    block.className = "ircAuthorBlock"
 
-        let message_icon = document.createElement("span");
-        message_icon.textContent = "✉️"
-        message_icon.className = "ircIcon"
+    let blockinfo1 = e.querySelector(".blockinfo1");
+    let messages1 = blockinfo1.childNodes[4].textContent.trim();
+    let messages2 = blockinfo1.childNodes[6].textContent.trim();
+    let message_status = document.createElement("span");
+    message_status.textContent = `${messages1.slice(11)} / ${(messages2.slice(10) || 0)} / `
 
-        let blockinfo2 = e.querySelector(".blockinfo2");
-        let name = e.querySelector(".namestyle");
-        let group = blockinfo2.childNodes[1];
-        if (group == null) {
-            group = document.createElement("b");
-            group.textContent = "YMER";
-        }
+    let message_icon = document.createElement("span");
+    message_icon.textContent = "✉️"
+    message_icon.className = "ircIcon"
 
-        let title = document.createElement("span");
-        title.className = "ircTitle"
-        title.textContent = blockinfo2.childNodes[3].textContent.trim().slice(8);
+    let blockinfo2 = e.querySelector(".blockinfo2");
+    let name = e.querySelector(".namestyle");
+    let group = blockinfo2.childNodes[1];
+    if (group == null) {
+        group = document.createElement("b");
+        group.textContent = "YMER";
+    }
 
-        let online = e.querySelector(".onlinest");
-        let offline = e.querySelector(".offlinest");
-        let online_status = document.createElement("span");
-        if (online.textContent.trim() == "") {
-            online_status = offline;
-            e.removeChild(online)
-        } else {
-            online_status = online;
-            e.removeChild(offline)
-        }
+    let title = document.createElement("span");
+    title.className = "ircTitle"
+    title.textContent = blockinfo2.childNodes[3].textContent.trim().slice(8) || "—";
 
-        let reputation = e.querySelector(".repamsg > .user-reputation-overall");
+    let online = e.querySelector(".onlinest");
+    let offline = e.querySelector(".offlinest");
+    let online_status = document.createElement("span");
+    if (online.textContent.trim() == "") {
+        online_status = offline;
+        e.removeChild(online)
+    } else {
+        online_status = online;
+        e.removeChild(offline)
+    }
 
-        let control_buttons = post.querySelector(".controlMsgBox.msgIControl");
-        control_buttons.querySelectorAll("a").forEach((a)=>{
-            if (a.textContent == "Ответить") {
-                a.textContent = "↩"
+    let reputation = e.querySelector(".repamsg > .user-reputation-overall");
+
+    let control_buttons = post.querySelector(".controlMsgBox.msgIControl");
+    control_buttons.querySelectorAll("a").forEach((a)=>{
+        if (a.textContent == "Ответить") {
+            a.textContent = "↩"
             // } else if  (a.textContent == "Мне нравится") {
             //     a.textContent = "❤"
             // } else if  (a.textContent == "Больше не нравится") {
             //     a.textContent = "💔"
-            } else if  (a.textContent == "Редактировать") {
-                a.textContent = "✎"
-            }
-        })
+        } else if  (a.textContent == "Редактировать") {
+            a.textContent = "✎"
+        }
+    })
 
-        block.append(name)
-        block.append(group)
-        block.append(document.createElement("br"))
-        block.append(message_icon)
-        block.append(message_status)
-        block.append(title)
-        block.append(document.createElement("br"))
-        block.append(online_status)
-        block.append(reputation)
 
-        e.removeChild(blockinfo1)
-        e.removeChild(blockinfo2)
-        e.append(block)
+    post.classList.add("ircPost");
 
-        post.querySelector(".msgInfo").append(control_buttons)
-    });
+    block.append(name)
+    block.append(group)
+    block.append(document.createElement("br"))
+    block.append(message_icon)
+    block.append(message_status)
+    block.append(title)
+    block.append(document.createElement("br"))
+    block.append(online_status)
+    block.append(reputation)
+
+    e.removeChild(blockinfo1)
+    e.removeChild(blockinfo2)
+    e.append(block)
+
+    post.querySelector(".msgInfo").append(control_buttons)
 }
 
 function moveNavigationToBottom() {
