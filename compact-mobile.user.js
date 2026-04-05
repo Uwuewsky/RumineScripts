@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Rumine Mobile Compact Style
-// @version      1.7
+// @version      1.8
 // @description  Скрипт для стилизации форума ru-minecraft.ru под IRC
 // @author       Sab [https://ru-minecraft.ru/user/Sab/]
 // @match        https://ru-minecraft.ru/forum/showtopic-*
@@ -172,7 +172,8 @@ function restyleUserInfo(post) {
     let blockinfo2 = e.querySelector(".blockinfo2");
     let name = e.querySelector(".namestyle");
     let group = blockinfo2.childNodes[1];
-    if (group == null) {
+
+    if (group.nodeName == "BR") {
         group = document.createElement("b");
         group.textContent = "YMER";
     }
@@ -186,9 +187,11 @@ function restyleUserInfo(post) {
     let online_status = document.createElement("span");
     if (online.textContent.trim() == "") {
         online_status = offline;
+	online_status.textContent = "🔴"
         e.removeChild(online)
     } else {
         online_status = online;
+	online_status.textContent = "🟢"
         e.removeChild(offline)
     }
 
