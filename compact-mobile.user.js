@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Rumine Mobile Compact Style
-// @version      1.8
+// @version      1.9.1
 // @description  Скрипт для стилизации форума ru-minecraft.ru под IRC
 // @author       Sab [https://ru-minecraft.ru/user/Sab/]
 // @match        https://ru-minecraft.ru/forum/showtopic-*
@@ -43,7 +43,7 @@ function injectStyles() {
     }
 
     #header, .ComplaintMessageLinck,
-    .controlMsgBox.msgIControl br, .signature, .signature ~ * {
+    .controlMsgBox.msgIControl br, .signature {
         display: none;
     }
 
@@ -151,7 +151,24 @@ function restyleUserInfoBlocks() {
     });
 }
 
+function fixSignatureDiv(post) {
+    let sign = post.querySelector(".signature");
+
+    if (!sign) {
+	return;
+    }
+
+    let sign_sibling = sign.nextSibling;
+
+    while (sign_sibling) {
+	sign.appendChild(sign_sibling)
+	sign_sibling = sign.nextSibling;
+    }
+}
+
 function restyleUserInfo(post) {
+
+    fixSignatureDiv(post);
 
     let e = post.querySelector(".msginfoa");
     if (e == null) { return; }
