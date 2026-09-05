@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Rumine Mobile Fix
-// @version      1.5
+// @version      1.6
 // @description  Скрипт для фикса мобильного форума ru-minecraft.ru
 // @author       Sab [https://ru-minecraft.ru/user/Sab/]
 // @match        https://ru-minecraft.ru/forum/showtopic-*
@@ -50,6 +50,11 @@
     .ui-dialog .ui-dialog-content {
         padding: 0 10px !important;
         height: auto !important;
+    }
+
+    ol.boxUserTrophies {
+        max-height: 80vh !important;
+        overflow: auto;
     }
 
     #reputation_view_popup, #bullet_energy_emos div {
