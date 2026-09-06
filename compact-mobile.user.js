@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Rumine Mobile Compact Style
-// @version      1.10
+// @version      1.11
 // @description  Скрипт для компактного вида форума ru-minecraft.ru с телефонов
 // @author       Sab [https://ru-minecraft.ru/user/Sab/]
 // @match        https://ru-minecraft.ru/forum/showtopic-*
@@ -155,14 +155,14 @@ function fixSignatureDiv(post) {
     let sign = post.querySelector(".signature");
 
     if (!sign) {
-	return;
+        return;
     }
 
     let sign_sibling = sign.nextSibling;
 
     while (sign_sibling) {
-	sign.appendChild(sign_sibling)
-	sign_sibling = sign.nextSibling;
+        sign.appendChild(sign_sibling)
+        sign_sibling = sign.nextSibling;
     }
 }
 
@@ -195,7 +195,7 @@ function restyleUserInfo(post) {
         group.textContent = "YMER";
     }
 
-    let title = e.querySelector(".trophiesCount > a");
+    let title = e.querySelector(".trophiesCount > a") || document.createElement("span");
     title.className = "ircTitle"
     title.textContent = blockinfo2.childNodes[3].textContent.trim().slice(8) || "—";
 
