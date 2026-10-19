@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Rumine Mobile Compact Style
-// @version      1.11
+// @version      1.12
 // @description  Скрипт для компактного вида форума ru-minecraft.ru с телефонов
 // @author       Sab [https://ru-minecraft.ru/user/Sab/]
 // @match        https://ru-minecraft.ru/forum/showtopic-*
@@ -12,6 +12,10 @@
 
 
 (function() {
+
+// Счетчик для выдачи id каждому блоку подписи.
+let signature_count = 0;
+
 function initIrcScript() {
     injectStyles();
     moveNavigationToBottom()
@@ -45,6 +49,10 @@ function injectStyles() {
     #header, .ComplaintMessageLinck,
     .controlMsgBox.msgIControl br, .signature {
         display: none;
+    }
+
+    .signature-open {
+        display: block !important;
     }
 
     .ircPost div[class^="likeBox"] div {
@@ -144,6 +152,10 @@ function injectStyles() {
 }
 
 function restyleUserInfoBlocks() {
+    /*
+     * Стилизирует все блоки с информацией об юзере;
+     */
+
     let posts = document.querySelectorAll(".msg");
     posts.forEach((post)=>{
         try { restyleUserInfo(post) }
@@ -152,11 +164,16 @@ function restyleUserInfoBlocks() {
 }
 
 function fixSignatureDiv(post) {
-    let sign = post.querySelector(".signature");
+    /*
+     * Складывает всю подпись в один div с уникальным id;
+     */
 
+    let sign = post.querySelector(".signature");
     if (!sign) {
-        return;
+        return false;
     }
+
+    sign.id = "signature-" + signature_count++;
 
     let sign_sibling = sign.nextSibling;
 
@@ -164,11 +181,23 @@ function fixSignatureDiv(post) {
         sign.appendChild(sign_sibling)
         sign_sibling = sign.nextSibling;
     }
+
+    return sign.id;
+}
+
+function toggleSignature(sign_id) {
+    /*
+     * Переключает видимость подписи по id;
+     */
+
+    let sign = document.getElementById(sign_id);
+    sign.classList.toggle("signature-open");
 }
 
 function restyleUserInfo(post) {
-
-    fixSignatureDiv(post);
+    /*
+     * Изменяет макет отдельного поста;
+     */
 
     let e = post.querySelector(".msginfoa");
     if (e == null) { return; }
@@ -176,6 +205,7 @@ function restyleUserInfo(post) {
     let block = document.createElement("div");
     block.className = "ircAuthorBlock"
 
+    // Информация о кол-ве сообщений, симпатий.
     let blockinfo1 = e.querySelector(".blockinfo1");
     let messages1 = blockinfo1.childNodes[4].textContent.trim();
     let messages2 = blockinfo1.childNodes[6].textContent.trim();
@@ -186,6 +216,7 @@ function restyleUserInfo(post) {
     message_icon.textContent = "✉️"
     message_icon.className = "ircIcon"
 
+    // Информация о группе.
     let blockinfo2 = e.querySelector(".blockinfo2");
     let name = e.querySelector(".namestyle");
     let group = blockinfo2.childNodes[1];
@@ -195,10 +226,12 @@ function restyleUserInfo(post) {
         group.textContent = "YMER";
     }
 
+    // Информация о трофеях и звании.
     let title = e.querySelector(".trophiesCount > a") || document.createElement("span");
     title.className = "ircTitle"
     title.textContent = blockinfo2.childNodes[3].textContent.trim().slice(8) || "—";
 
+    // Информация об онлайн-статусе.
     let online = e.querySelector(".onlinest");
     let offline = e.querySelector(".offlinest");
     let online_status = document.createElement("span");
@@ -212,12 +245,15 @@ function restyleUserInfo(post) {
         e.removeChild(offline)
     }
 
+    // Информация о репутации.
     let reputation = e.querySelector(".repamsg > .user-reputation-overall");
 
+    // Компактные кнопки ответа, редактирования.
     let control_buttons = post.querySelector(".controlMsgBox.msgIControl");
     control_buttons.querySelectorAll("a").forEach((a)=>{
         if (a.textContent == "Ответить") {
             a.textContent = "↩"
+            // // При нажатии на лайк, эмодзи заменяется текстом - не работает.
             // } else if  (a.textContent == "Мне нравится") {
             //     a.textContent = "❤"
             // } else if  (a.textContent == "Больше не нравится") {
@@ -226,6 +262,17 @@ function restyleUserInfo(post) {
             a.textContent = "✎"
         }
     })
+
+    // Пофиксить/скрыть подпись и сделать кнопку для разворачивания.
+    let signature_id = fixSignatureDiv(post);
+    if (signature_id) {
+        let button_unfold = document.createElement("a");
+        button_unfold.textContent = "▽";
+
+        button_unfold.onclick = () => { toggleSignature(signature_id) };
+
+        control_buttons.insertBefore(button_unfold, control_buttons.firstChild);
+    }
 
 
     post.classList.add("ircPost");
@@ -248,6 +295,10 @@ function restyleUserInfo(post) {
 }
 
 function moveNavigationToBottom() {
+    /*
+     * Убирает навигацию по форуму вниз, чтобы не скроллить каждый раз;
+     */
+
     let root = document.getElementById("bullet_energy")
     let nav1 = root.querySelector(".navigate_forum")
     let nav2 = root.querySelector(".top_box")
