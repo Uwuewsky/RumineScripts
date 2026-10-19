@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Rumine Mobile Compact Style
-// @version      1.12
+// @version      1.13
 // @description  Скрипт для компактного вида форума ru-minecraft.ru с телефонов
 // @author       Sab [https://ru-minecraft.ru/user/Sab/]
 // @match        https://ru-minecraft.ru/forum/showtopic-*
@@ -271,7 +271,9 @@ function restyleUserInfo(post) {
 
         button_unfold.onclick = () => { toggleSignature(signature_id) };
 
-        control_buttons.insertBefore(button_unfold, control_buttons.firstChild);
+        let msg_info = post.querySelector(".msgInfo").children[1];
+        msg_info.insertAdjacentText("beforeend", " / ");
+        msg_info.insertAdjacentElement("beforeend", button_unfold);
     }
 
 
