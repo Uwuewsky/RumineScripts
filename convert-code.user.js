@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Rumine Convert to HTML-code
-// @version      1.0
+// @version      1.0.1
 // @description  Скрипт для конвертации крокозябр в html-код
 // @author       Sab [https://ru-minecraft.ru/user/Sab/]
 // @match        https://ru-minecraft.ru/forum/showtopic-*
@@ -26,7 +26,7 @@ function convertToNumericEntities(str) {
 
     if (!str) return str;
 
-    const punctuation = new Set(Array.from(".,!?;:()[]{}+-=_/\\…—–'\"<>&*…"));
+    const punctuation = new Set(Array.from(".,!?;:()[]{}+-=_/\\…—–'\"<>&*…~°•¤_@#€$%^"));
     let result = "";
 
     for (const char of str) {
