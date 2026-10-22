@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Rumine Mobile Fix
-// @version      1.6
+// @version      1.7
 // @description  Скрипт для фикса мобильного форума ru-minecraft.ru
 // @author       Sab [https://ru-minecraft.ru/user/Sab/]
 // @match        https://ru-minecraft.ru/forum/showtopic-*
@@ -15,24 +15,14 @@
 (function() {
     document.head.insertAdjacentHTML("beforeend",
     `<style id="mobileFixScriptStyles">
+
+    /* Большие картинки в постах */
     .msgText img:not(.emoji, .emoji2), .postUserBox img:not(.emoji, .emoji2) {
         max-width: 98%;
         height: auto;
     }
 
-    ol.bbcode_forum {
-        height: unset;
-    }
-
-    .avatar img {
-        max-height: 90px;
-        max-width: 90px;
-    }
-
-    .msgText {
-        word-wrap: anywhere;
-    }
-
+    /* Убрать белый фон у картинок */
     .msgText img[title], .postUserBox img[title] {
         vertical-align: middle;
         border: none !important;
@@ -40,6 +30,24 @@
         border-radius: 0 !important;
     }
 
+    /* Большие аватарки */
+    .avatar img {
+        max-height: 90px;
+        max-width: 90px;
+        height: auto;
+    }
+
+    /* Срезанный тулбар */
+    ol.bbcode_forum {
+        height: unset;
+    }
+
+    /* Сплошнойтекствыезжалзаграницы */
+    .msgText {
+        word-wrap: anywhere;
+    }
+
+    /* Всплывающие диалоговые окна зафиксированы на весь экран */
     .ui-dialog {
         width: 100vw !important;
         height: 100vh !important;
@@ -50,6 +58,16 @@
     .ui-dialog .ui-dialog-content {
         padding: 0 10px !important;
         height: auto !important;
+        overflow: unset !important;
+    }
+
+    .ui-dialog-title {
+        font-size: 14px !important;
+    }
+
+    /* Элементы в диалогах тоже побольше */
+    #bepopup-promt-text {
+        width: 97% !important;
     }
 
     ol.boxUserTrophies {
@@ -107,10 +125,6 @@
         margin: 0;
     }
 
-    .ui-dialog-title {
-        font-size: 14px !important;
-    }
-
     textarea.reputation-comment-input {
         width: 97% !important;
     }
@@ -134,8 +148,21 @@
         height: auto;
     }
 
+    /* Срезанный блок голосования */
     #containerPoll .topicPollBox {
         width: unset;
     }
+
+    /* Палитра выбора цвета, iframe */
+    #cp iframe {
+        width: 100vw;
+        height: calc(100vw/1.5);
+    }
     </style>`);
+
+    // Пофиксить мелкую палитру
+    // Такая хрень потому что скрипт исполняется фиг пойми в каком контексте,
+    // и коллбеки с кнопки не работают в перемешку с глобальными функциями.
+    document.getElementById("colorSelector").setAttribute("onclick", "ins_colors_custom(this);");
+    window.eval(`ins_colors_custom = function(d) { ins_colors(d); document.querySelector("#cp iframe").addEventListener("load", function() { let tab = this.contentWindow.document.querySelector("table"); tab.style.width = "100vw"; tab.style.height = "100vh"; }); }`);
 })();
